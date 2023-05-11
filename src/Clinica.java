@@ -14,8 +14,8 @@ public class Clinica {
     public static String outputCitas = "C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Citas.csv";
     public static String outputAdministradores = "C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Administradores.csv";
 
-    public static ArrayList <Doctor> aDoc = new ArrayList<Doctor>();
-    public static ArrayList <Paciente> aPac = new ArrayList<Paciente>();
+    public static ArrayList <Doctor> Doctr = new ArrayList<Doctor>();
+    public static ArrayList <Paciente> Pacnt = new ArrayList<Paciente>();
 
     public static void main(String[] args) throws IOException, ParseException{
         BufferedWriter bwDoctores = new BufferedWriter(new FileWriter(outputDoctores, true));
@@ -23,16 +23,17 @@ public class Clinica {
         BufferedWriter bwCitas = new BufferedWriter(new FileWriter(outputCitas, true));
         BufferedWriter bwAdmin = new BufferedWriter(new FileWriter(outputAdministradores, true));
 
+
         leer.useDelimiter("\n");
-        int opc, ban = 0, ban1 = 0;
+        int op, bann = 0, bann1;
         boolean acceso = false;
         HashMap<String, String> mapa = new HashMap<String, String>();
-        System.out.println("**** Bienvenido al sistema de Clinica ****\n");
+        System.out.println("---- Bienvenido al sistema de Clinica ----");
         do{
-            ban1 = archivV("C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Administradores.csv"); //llamado a metodo que rectifica que el archivo no esté vacio
-            if(ban1 == 1)
+            bann1 = archivV("C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Administradores.csv");
+            if(bann1 == 1)
             {
-                System.out.println("****Ingreso para administradores****\n");
+                System.out.println("---Ingreso para administradores---");
                 System.out.println("Ingrese ID: ");
                 String id = leer.next();
                 System.out.println("Ingrese contraseña: ");
@@ -43,7 +44,7 @@ public class Clinica {
             else
             {
                 System.out.println("No hay Administradores dados de alta");
-                System.out.println("**** Alta de Administrador ****\n");
+                System.out.println("--- Alta de Administrador ---");
                 System.out.println("Ingrese ID: ");
                 String id = leer.next();
                 System.out.println("Ingrese contraseña: ");
@@ -54,22 +55,22 @@ public class Clinica {
         do
         {
             try{
-                System.out.println("\nSeleccione una opción:\n");
-                System.out.println("1. Alta de Administrador");
-                System.out.println("2. Alta de Doctor ");
+                System.out.println("-Seleccione una opción:");
+                System.out.println("1. Alta Administrador");
+                System.out.println("2. Alta Doctor ");
                 System.out.println("3. Alta Paciente");
                 System.out.println("4. Agendar Cita");
-                System.out.println("5. Verificar citas");
+                System.out.println("5. Mostrar Cita");
                 System.out.println("0. Salida");
 
-                opc = leer.nextInt();
-                switch(opc)
+                op = leer.nextInt();
+                switch(op)
                 {
                     case 1:
-                        System.out.println("**** Alta de Administrador ****\n");
-                        System.out.println("Ingrese su ID: ");
+                        System.out.println("--- Alta de Administrador ---");
+                        System.out.println("Ingrese ID: ");
                         String id = leer.next();
-                        System.out.println("Ingrese su contraseña: ");
+                        System.out.println("Ingrese contraseña: ");
                         String pass = leer.next();
                         creaAdministrador(mapa, id, pass, bwAdmin);
                         break;
@@ -87,35 +88,40 @@ public class Clinica {
                         break;
 
                     case 5:
+                        Cita[] citas = new Cita[0];
+
+                        int idCita = 0;
+                        Cita.mostrarCita(citas, idCita);
+
                         break;
 
                     case 0:
-                        System.out.println("Saliendo");
-                        ban = 1;
+                        System.out.println("Salir");
+                        bann = 1;
                         break;
 
                     default:
 
-                        System.out.println("Opción incorrecta\n");
+                        System.out.println("Opción no valida");
                         break;
                 }
             }
             catch (Exception e)
             {
-                System.out.println("ERROR !!\n");
+                System.out.println("Error! Intente de nuevo.");
                 break;
             }
-        }while(ban == 0);
+        }while(bann == 0);
     }
     public static void creaDoctor(BufferedWriter bw) throws IOException {
-        System.out.print("Ingresar el nombre del doctor\n");
-        String nombreDoctor = leer.next();
-        System.out.print("Ingresar la especialidad del doctor\n");
-        String especialidadDoctor = leer.next();
-        System.out.print("Ingresar el Id del doctor\n");
-        String idDoctor = leer.next();
+        System.out.print("Ingresar nombre del doctor");
+        String nombreDoc = leer.next();
+        System.out.print("Ingresar especialidad del doctor");
+        String espeDoc = leer.next();
+        System.out.print("Ingresar ID del doctor");
+        String idDoc = leer.next();
 
-        Doctor doctorInfo = new Doctor(idDoctor, nombreDoctor, especialidadDoctor);
+        Doctor doctorInfo = new Doctor(idDoc, nombreDoc, espeDoc);
 
         try(FileWriter fw = new FileWriter(outputDoctores, true);
             BufferedWriter bww = new BufferedWriter(fw);
@@ -123,7 +129,7 @@ public class Clinica {
 
             out.print(doctorInfo.id);
             out.print(",");
-            out.print(doctorInfo.nombreDoctor);
+            out.print(doctorInfo.nomDoctor);
             out.print(",");
             out.println(doctorInfo.esp);
         }
@@ -133,7 +139,7 @@ public class Clinica {
             try {
                 if (bw != null) {
                     bw.close();
-                    System.out.println("\nCambios guardados");
+                    System.out.println("Datos guardados");
                 }
             } catch (IOException e) {
                 System.out.println("IOException catched while closing: " + e.getMessage());
@@ -141,9 +147,9 @@ public class Clinica {
         }
     }
     public static void creaPaciente(BufferedWriter bw) throws IOException {
-        System.out.print("Ingresar el nombre del Paciente\n");
+        System.out.print("Ingresar nombre del Paciente");
         String nombrePaciente = leer.next();
-        System.out.print("Ingresar el Id del paciente\n");
+        System.out.print("Ingresar Id del paciente");
         String idPaciente = leer.next();
 
         Paciente PacienteInfo = new Paciente(nombrePaciente,idPaciente);
@@ -154,7 +160,7 @@ public class Clinica {
 
             out.print(PacienteInfo.id);
             out.print(",");
-            out.println(PacienteInfo.nombrePaciente);
+            out.println(PacienteInfo.nomPaciente);
         }
         catch(IOException e) {
             System.out.println("IOException catched while writing: " + e.getMessage());
@@ -162,7 +168,7 @@ public class Clinica {
             try {
                 if (bw != null) {
                     bw.close();
-                    System.out.println("\nCambios guardados");
+                    System.out.println("Datos guardados");
                 }
             } catch (IOException e) {
                 System.out.println("IOException catched while closing: " + e.getMessage());
@@ -171,17 +177,17 @@ public class Clinica {
     }
     public static void creaCita(BufferedWriter bw) throws IOException {
         try{
-            System.out.println("Ingresar el id de la cita:");
+            System.out.println("Ingresar id de la cita:");
             int idC = leer.nextInt();
-            System.out.print("Ingresar la fecha de la cita\n");
+            System.out.print("Ingresar fecha de la cita");
             String fechaCitaString = leer.next();
             Date fechaCita = new SimpleDateFormat("dd/MM/yyyy").parse(fechaCitaString);
-            System.out.print("Ingresar el motivo de la cita\n");
+            System.out.print("Ingresar motivo de la cita");
             leer.nextLine();
             String motivoCita = leer.nextLine();
-            System.out.print("Ingresar el id del doctor\n");
+            System.out.print("Ingresar id del doctor");
             String idDoctor = leer.next();
-            System.out.print("Ingresar el id del paciente\n");
+            System.out.print("Ingresar id del paciente");
             String idPaciente = leer.next();
             Cita citaInfo = new Cita(idC, fechaCita, Integer.parseInt(idDoctor), Integer.parseInt(idPaciente), motivoCita);
 
@@ -189,15 +195,15 @@ public class Clinica {
                 BufferedWriter bww = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bww)){
 
-                out.print(citaInfo.id);
+                out.print(citaInfo.getId());
                 out.print(",");
-                out.println(citaInfo.fechaCita);
+                out.println(citaInfo.getFechaCita());
                 out.print(",");
-                out.print(citaInfo.idDoctor);
+                out.print(citaInfo.getIdDoctor());
                 out.print(",");
-                out.print(citaInfo.idPaciente);
+                out.print(citaInfo.getIdPaciente());
                 out.print(",");
-                out.println(citaInfo.motivoCita);
+                out.println(citaInfo.getMotivoCita());
             }
             catch(IOException e) {
                 System.out.println("IOException catched while writing: " + e.getMessage());
@@ -205,7 +211,7 @@ public class Clinica {
                 try {
                     if (bw != null) {
                         bw.close();
-                        System.out.println("\nCambios guardados");
+                        System.out.println("Datos guardados");
                     }
                 } catch (IOException e) {
                     System.out.println("IOException catched while closing: " + e.getMessage());
@@ -227,13 +233,12 @@ public class Clinica {
     public static int archivV(String archivo)
     {
         int i = 0;
-
         try
         {
             BufferedReader br = new BufferedReader(new FileReader(archivo));
             if (br.readLine() == null)
             {
-                System.out.println("file empty");
+                System.out.println("Archivo vacio");
             }
             else i = 1;
         }
@@ -245,11 +250,11 @@ public class Clinica {
     public static void creaAdministrador(HashMap <String,String> mapa, String id, String pw, BufferedWriter bw)throws IOException{
         if(mapa.containsKey(id))
         {
-            System.out.println("\nError!\nNo se puede registrar dos veces el mismo Administrador\n");
+            System.out.println("Error!..No se puede registrar dos veces el mismo Administrador");
         }
         else{
             mapa.put(id, pw);
-            System.out.println("\nAdministrador agregado");
+            System.out.println("Administrador creado");
         }
         Iterator<String> iterator = mapa.keySet().iterator();
         String inputFilename = "C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Administradores.csv";
@@ -268,7 +273,7 @@ public class Clinica {
             try {
                 if (bufferedWriter != null) {
                     bufferedWriter.close();
-                    System.out.println("\nCambios guardados");
+                    System.out.println("Datos guardados");
                 }
             } catch (IOException e) {
                 System.out.println("IOException catched while closing: " + e.getMessage());
@@ -284,21 +289,20 @@ public class Clinica {
                 i = true;
             else
             {
-                System.out.println("La contraseña es incorrecta!\n");
+                System.out.println("La contraseña es incorrecta");
                 i = false;
             }
         }
         else
         {
-            System.out.println("El administrador no existe!\n");
+            System.out.println("Administrador no existente");
             i = false;
         }
         return i;
     }
     public static void load(HashMap<String, String> m)
     {
-        String inputFilename = "C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src" +
-                "\\Administradores.csv";
+        String inputFilename = "C:\\Users\\KATSURA\\IdeaProjects\\CJEvidenciaFinal\\src\\Administradores.csv";
         String a [];
         BufferedReader bufferedReader = null;
         try {
