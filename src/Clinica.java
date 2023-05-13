@@ -23,7 +23,6 @@ public class Clinica {
         BufferedWriter bwCitas = new BufferedWriter(new FileWriter(outputCitas, true));
         BufferedWriter bwAdmin = new BufferedWriter(new FileWriter(outputAdministradores, true));
 
-
         leer.useDelimiter("\n");
         int op, bann = 0, bann1;
         boolean acceso = false;
